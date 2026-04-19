@@ -92,7 +92,7 @@ exports.forgotPassword = catchAsyncError(async (req, res, next) => {
   try {
     sendEmail({
       email: user.email,
-      subject: "ESSUS Password Recovery",
+      subject: "Velmora Password Recovery",
       message,
     });
 

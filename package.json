@@ -1,5 +1,5 @@
 {
-  "name": "essus",
+  "name": "velmora-backend",
   "version": "1.0.0",
   "description": "ecommerce using MERN stack",
   "main": "server.js",
