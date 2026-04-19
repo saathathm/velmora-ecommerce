@@ -1,5 +1,8 @@
 import { useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { countries } from "countries-list";
+import { saveShippingInfo } from "../../slices/cartSlice";
+import { useNavigate } from "react-router-dom";
 
 export default function Shipping() {
   const { shippingInfo } = useSelector((state) => state.cartState);
@@ -10,11 +13,30 @@ export default function Shipping() {
   const [postalCode, setPostalCode] = useState(shippingInfo.postalCode);
   const [country, setCountry] = useState(shippingInfo.country);
   const [state, setState] = useState(shippingInfo.state);
+  const countryList = Object.values(countries);
+
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const submitHandler = (e) => {
+    e.preventDefault();
+    dispatch(
+      saveShippingInfo({
+        address,
+        city,
+        phoneNo,
+        postalCode,
+        country,
+        state,
+      }),
+    );
+    navigate("/order/confirm");
+  };
 
   return (
     <div className="row wrapper">
       <div className="col-10 col-lg-5">
-        <form className="shadow-lg">
+        <form className="shadow-lg" onSubmit={submitHandler}>
           <h1 className="mb-4">Shipping Info</h1>
           <div className="form-group">
             <label htmlFor="address_field">Address</label>
@@ -22,7 +44,8 @@ export default function Shipping() {
               type="text"
               id="address_field"
               className="form-control"
-              value=""
+              value={address}
+              onChange={(e) => setAddress(e.target.value)}
               required
             />
           </div>
@@ -33,7 +56,8 @@ export default function Shipping() {
               type="text"
               id="city_field"
               className="form-control"
-              value=""
+              value={city}
+              onChange={(e) => setCity(e.target.value)}
               required
             />
           </div>
@@ -44,7 +68,8 @@ export default function Shipping() {
               type="phone"
               id="phone_field"
               className="form-control"
-              value=""
+              value={phoneNo}
+              onChange={(e) => setPhoneNo(e.target.value)}
               required
             />
           </div>
@@ -55,7 +80,8 @@ export default function Shipping() {
               type="number"
               id="postal_code_field"
               className="form-control"
-              value=""
+              value={postalCode}
+              onChange={(e) => setPostalCode(e.target.value)}
               required
             />
           </div>
@@ -65,11 +91,15 @@ export default function Shipping() {
             <select
               id="country_field"
               className="form-control"
-              value=""
+              value={country}
+              onChange={(e) => setCountry(e.target.value)}
               required
             >
-              <option>India</option>
-              <option>USA</option>
+              {countryList.map((country) => (
+                <option key={country.name} value={country.name}>
+                  {country.name}
+                </option>
+              ))}
             </select>
           </div>
 
@@ -79,7 +109,8 @@ export default function Shipping() {
               type="text"
               id="state_field"
               className="form-control"
-              value=""
+              value={state}
+              onChange={(e) => setState(e.target.value)}
               required
             />
           </div>
