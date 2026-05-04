@@ -20,6 +20,18 @@ export default function ConfirmOrder() {
   const taxPrice = Number((0.05 * itemsPrice).toFixed(2));
   const totalPrice = (itemsPrice + shippingPrice + taxPrice).toFixed(2);
 
+  const processPayment = () => {
+    const data = {
+      itemsPrice,
+      shippingPrice,
+      taxPrice,
+      totalPrice,
+    };
+
+    sessionStorage.setItem("orderInfo", JSON.stringify(data));
+    navigate("/payment");
+  };
+
   useEffect(() => {
     validateShipping(shippingInfo, navigate);
   }, [navigate, shippingInfo]);
@@ -48,7 +60,7 @@ export default function ConfirmOrder() {
           {/* <hr /> */}
           {cartItems &&
             cartItems.map((item) => (
-              <Fragment>
+              <Fragment key={item.product}>
                 <div className="cart-item my-1">
                   <div className="row">
                     <div className="col-4 col-lg-2">
@@ -82,10 +94,12 @@ export default function ConfirmOrder() {
             <h4>Order Summary</h4>
             <hr />
             <p>
-              Subtotal: <span className="order-summary-values">${itemsPrice}</span>
+              Subtotal:{" "}
+              <span className="order-summary-values">${itemsPrice}</span>
             </p>
             <p>
-              Shipping: <span className="order-summary-values">${shippingPrice}</span>
+              Shipping:{" "}
+              <span className="order-summary-values">${shippingPrice}</span>
             </p>
             <p>
               Tax: <span className="order-summary-values">${taxPrice}</span>
@@ -98,7 +112,11 @@ export default function ConfirmOrder() {
             </p>
 
             <hr />
-            <button id="checkout_btn" className="btn btn-primary btn-block">
+            <button
+              id="checkout_btn"
+              onClick={processPayment}
+              className="btn btn-primary btn-block"
+            >
               Proceed to Payment
             </button>
           </div>
