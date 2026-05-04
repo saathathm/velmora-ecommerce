@@ -116,10 +116,12 @@ export default function Cart() {
                   Est. total:{" "}
                   <span className="order-summary-values">
                     $
-                    {items.reduce(
-                      (acc, item) => acc + item.quantity * item.price,
-                      0
-                    )}
+                    {items
+                      .reduce(
+                        (acc, item) => acc + item.quantity * item.price,
+                        0,
+                      )
+                      .toFixed(2)}
                   </span>
                 </p>
 

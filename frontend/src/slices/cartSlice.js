@@ -22,19 +22,15 @@ const cartSlice = createSlice({
       const item = action.payload;
 
       const isItemExist = state.items.find((i) => i.product === item.product);
+
       if (isItemExist) {
-        state = {
-          ...state,
-          loading: false,
-        };
+        state.loading = false;
       } else {
-        state = {
-          items: [...state.items, item],
-          loading: false,
-        };
+        state.items.push(item);
+        state.loading = false;
+
         localStorage.setItem("cartItems", JSON.stringify(state.items));
       }
-      return state;
     },
     increaseCartItemQty(state, action) {
       state.items = state.items.map((item) => {

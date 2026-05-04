@@ -21,6 +21,7 @@ import ForgotPassword from "./components/user/ForgotPassword";
 import ResetPassword from "./components/user/ResetPassword";
 import Cart from "./components/cart/Cart";
 import Shipping from "./components/cart/Shipping.js";
+import ConfirmOrder from "./components/cart/ConfirmOrder.js";
 
 function App() {
   const dispatch = useDispatch();
@@ -84,6 +85,15 @@ function App() {
                 element={
                   <ProtectedRoute>
                     <Shipping />
+                  </ProtectedRoute>
+                }
+              />
+
+              <Route
+                path="/order/confirm"
+                element={
+                  <ProtectedRoute>
+                    <ConfirmOrder />
                   </ProtectedRoute>
                 }
               />
