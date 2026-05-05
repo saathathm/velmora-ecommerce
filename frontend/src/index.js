@@ -4,7 +4,8 @@ import ReactDOM from "react-dom/client";
 import App from "./App";
 import store from "./store";
 import { Provider } from "react-redux";
-axios.defaults.baseURL = "http://localhost:8000";
+import { BASE_URL } from "./utils/constants";
+axios.defaults.baseURL = BASE_URL;
 axios.defaults.withCredentials = true;
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
