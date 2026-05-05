@@ -1,5 +1,7 @@
 # Node.js modules
 node_modules/
+backend/node_modules/
+frontend/node_modules/
 
 # Environment variables
 backend/config/config.env
