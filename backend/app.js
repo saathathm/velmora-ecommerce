@@ -13,12 +13,16 @@ app.use(
     origin: [
       "http://localhost:3000",
       "http://localhost:5173",
-      "https://velmora-ecommerce-api.vercel.app",
+      "https://velmora-ecommerce-topaz.vercel.app",
       process.env.FRONTEND_URL,
     ].filter(Boolean),
     credentials: true,
+    methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
   }),
 );
+
+app.options("*", cors());
 
 app.use(express.json());
 app.use(cookieParser());
