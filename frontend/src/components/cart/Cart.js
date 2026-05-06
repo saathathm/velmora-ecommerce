@@ -14,13 +14,13 @@ export default function Cart() {
 
   const increaseQty = (item) => {
     const count = item.quantity;
-    if (item.stock == 0 || count >= item.stock) return;
+    if (item.stock === 0 || count >= item.stock) return;
     dispatch(increaseCartItemQty(item.product));
   };
 
   const decreaseQty = (item) => {
     const count = item.quantity;
-    if (count == 1) return;
+    if (count === 1) return;
     dispatch(decreaseCartItemQty(item.product));
   };
 

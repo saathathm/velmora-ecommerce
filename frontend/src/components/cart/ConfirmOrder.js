@@ -66,7 +66,7 @@ export default function ConfirmOrder() {
                     <div className="col-4 col-lg-2">
                       <img
                         src={item.image}
-                        altfor={item.name}
+                        alt={item.name}
                         height="45"
                         width="65"
                       />
