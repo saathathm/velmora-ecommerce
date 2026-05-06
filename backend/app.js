@@ -29,6 +29,13 @@ const auth = require("./routes/auth");
 const order = require("./routes/order");
 const payment = require("./routes/payment");
 
+app.get("/", (req, res) => {
+  res.status(200).json({
+    success: true,
+    message: "Velmora API is running",
+  });
+});
+
 app.use("/api/v1", products);
 app.use("/api/v1", auth);
 app.use("/api/v1", order);
