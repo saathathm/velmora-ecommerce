@@ -39,8 +39,8 @@ export default function Cart() {
 
           <div className="row d-flex justify-content-between">
             <div className="col-12 col-lg-8">
-              {items.map((item) => (
-                <Fragment>
+              {items.map((item, index) => (
+                <Fragment key={index}>
                   <hr />
                   <div className="cart-item">
                     <div className="row">
