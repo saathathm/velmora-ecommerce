@@ -11,10 +11,7 @@ exports.registerUser = catchAsyncError(async (req, res, next) => {
 
   let avatar;
 
-  let BASE_URL = process.env.BACKEND_URL;
-  if (process.env.NODE_ENV === "production") {
-    BASE_URL = `${req.protocol}://${req.get("host")}`;
-  }
+  let BASE_URL = process.env.BACKEND_URL || "http://localhost:8000";
 
   if (req.file) {
     avatar = `${BASE_URL}/uploads/user/${req.file.originalname}`;
@@ -58,6 +55,8 @@ exports.logoutUser = (req, res, next) => {
     .cookie("token", null, {
       expires: new Date(Date.now()),
       httpOnly: true,
+      sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+      secure: process.env.NODE_ENV === "production",
     })
     .status(200)
     .json({
@@ -77,11 +76,7 @@ exports.forgotPassword = catchAsyncError(async (req, res, next) => {
   const resetToken = user.getResetToken();
   await user.save({ validateBeforeSave: false });
 
-  let BASE_URL = process.env.FRONTEND_URL;
-  if (process.env.NODE_ENV === "production") {
-    // BASE_URL = `${req.protocol}://${req.get("host")}`;
-    BASE_URL = `${req.protocol}://localhost:3000`;
-  }
+  const BASE_URL = process.env.FRONTEND_URL || "http://localhost:3000";
 
   //Create reset url
   const resetUrl = `${BASE_URL}/password/reset/${resetToken}`;
@@ -90,7 +85,7 @@ exports.forgotPassword = catchAsyncError(async (req, res, next) => {
     ${resetUrl} \n\n If you have not requested this email, then ignore it.`;
 
   try {
-    sendEmail({
+    await sendEmail({
       email: user.email,
       subject: "Velmora Password Recovery",
       message,
@@ -104,7 +99,7 @@ exports.forgotPassword = catchAsyncError(async (req, res, next) => {
     user.resetPasswordToken = undefined;
     user.resetPasswordTokenExpire = undefined;
     await user.save({ validateBeforeSave: false });
-    return next(new ErrorHandler(error.message), 500);
+    return next(new ErrorHandler(error.message, 500));
   }
 });
 
@@ -170,10 +165,7 @@ exports.updateProfile = catchAsyncError(async (req, res, next) => {
   };
 
   let avatar;
-  let BASE_URL = process.env.BACKEND_URL;
-  if (process.env.NODE_ENV === "production") {
-    BASE_URL = `${req.protocol}://${req.get("host")}`;
-  }
+  const BASE_URL = process.env.BACKEND_URL || "http://localhost:8000";
 
   if (req.file) {
     avatar = `${BASE_URL}/uploads/user/${req.file.originalname}`;
@@ -205,7 +197,7 @@ exports.getUser = catchAsyncError(async (req, res, next) => {
   const user = await User.findById(req.params.id);
   if (!user) {
     return next(
-      new ErrorHandler(`User not found with this id ${req.params.id}`)
+      new ErrorHandler(`User not found with this id ${req.params.id}`),
     );
   }
   res.status(200).json({
@@ -238,7 +230,7 @@ exports.deleteUser = catchAsyncError(async (req, res, next) => {
   const user = await User.findById(req.params.id);
   if (!user) {
     return next(
-      new ErrorHandler(`User not found with this id ${req.params.id}`)
+      new ErrorHandler(`User not found with this id ${req.params.id}`),
     );
   }
   await user.remove();
